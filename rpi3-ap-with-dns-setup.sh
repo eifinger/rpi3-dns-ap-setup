@@ -15,7 +15,22 @@ echo "Backing up DNS config to /etc/dnsmasq.conf.orig"
 sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
 sudo echo "interface=wlan0      # Use the require wireless interface - usually wlan0
   dhcp-range=192.168.0.2,192.168.0.20,255.255.255.0,24h" > /etc/dnsmasq.conf
-sudo echo "" > /etc/hostapd/hostapd.conf
+sudo echo "interface=wlan0
+driver=nl80211
+ssid=RPIAP
+hw_mode=g
+channel=7
+wmm_enabled=1
+ieee80211n=1
+ht_capab=[HT40][SHORT-GI-20][DSSS_CCK-40]
+macaddr_acl=0
+auth_algs=1
+ignore_broadcast_ssid=0
+wpa=2
+wpa_passphrase=123456789
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf
 sudo sed -i 's/#DAEMON_CONF/DAEMON_CONF="/etc/hostapd/hostapd.conf"/' /etc/default/hostapd
 sudo service hostapd start  
 sudo service dnsmasq start  
