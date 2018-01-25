@@ -1,26 +1,25 @@
 #!/bin/bash
-
 echo "Updating the system"
-sudo apt-get update
-sudo apt-get upgrade -y
+apt-get update
+apt-get upgrade -y
 echo "Installing DNS and Access Point"
-sudo apt-get install dnsmasq hostapd -y
+apt-get install dnsmasq hostapd -y
 echo "Configuring services"
-sudo systemctl stop dnsmasq
-sudo systemctl stop hostapd
-sudo echo "interface wlan0
+systemctl stop dnsmasq
+systemctl stop hostapd
+echo "interface wlan0
     static ip_address=192.168.4.1/24" > /etc/dhcpcd.conf
-sudo service dhcpcd restart
+service dhcpcd restart
 echo "Backing up DNS config to /etc/dnsmasq.conf.orig"
-sudo mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
-sudo echo "interface=wlan0      # Use the require wireless interface - usually wlan0
+mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+echo "interface=wlan0      # Use the require wireless interface - usually wlan0
   dhcp-range=192.168.0.2,192.168.0.20,255.255.255.0,24h" > /etc/dnsmasq.conf
 echo "Setting up Access Point"
 echo "Please provide the SSID and press <Enter>"
 read ssid
 echo "Please provide the password and press <Enter>"
 read passwd
-sudo echo "interface=wlan0
+echo "interface=wlan0
 driver=nl80211
 ssid=$ssid
 hw_mode=g
@@ -36,12 +35,12 @@ wpa_passphrase=$passwd
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf
-sudo sed -i 's/#DAEMON_CONF/DAEMON_CONF="/etc/hostapd/hostapd.conf"/' /etc/default/hostapd
-sudo service hostapd start  
-sudo service dnsmasq start  
-sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1' etc/sysctl.conf
-sudo iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
-sudo iptables-save > /etc/iptables.ipv4.nat
-sudo sed -i '/exit 0/aiptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
+sed -i 's/#DAEMON_CONF/DAEMON_CONF="/etc/hostapd/hostapd.conf"/' /etc/default/hostapd
+service hostapd start  
+service dnsmasq start  
+sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1' etc/sysctl.conf
+iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
+iptables-save > /etc/iptables.ipv4.nat
+sed -i '/exit 0/aiptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
 echo "Finished"
 echo "Access Point is set up with SSID $ssid and password $passwd"
