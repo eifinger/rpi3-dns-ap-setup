@@ -36,10 +36,10 @@ wpa_passphrase=$passwd
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf
-sed -i 's/#DAEMON_CONF/DAEMON_CONF="/etc/hostapd/hostapd.conf"/' /etc/default/hostapd
+sed -i 's:^#DAEMON_CONF:DAEMON_CONF="/etc/hostapd/hostapd.conf":' /etc/default/hostapd
 service hostapd start  
 service dnsmasq start  
-sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1' etc/sysctl.conf
+sed -i 's:^#net.ipv4.ip_forward=1:net.ipv4.ip_forward=1:' etc/sysctl.conf
 iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
 iptables-save > /etc/iptables.ipv4.nat
 sed -i '/exit 0/aiptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
