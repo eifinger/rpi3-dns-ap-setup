@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "DNS and AP setup script v0.1"
 echo "Updating the system"
 apt-get update
 apt-get upgrade -y
