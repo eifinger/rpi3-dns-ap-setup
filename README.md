@@ -1,5 +1,8 @@
 # rpi3-dns-ap-setup
-This script installs a DNS using dnsmasq and sets up a WLAN Access Point.
+This script installs a DNS using dnsmasq and sets up a WLAN Access Point.  
+  
+If an ethernet cable is connected, the Access Point is bridged to the wired network.
+This means if your Raspberry has internet connection via Ethernet, all clients connected to the WLAN AP have internet too.
 ## Prerequisites
 A fresh install of rasbian
 Tested on 2017-11-29-raspbian-stretch-lite
