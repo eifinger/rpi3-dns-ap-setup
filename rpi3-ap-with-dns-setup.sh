@@ -54,4 +54,5 @@ iptables-save > /etc/iptables.ipv4.nat
 sed -i '/exit 0/aiptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
 echo "Finished"
 echo "Access Point is set up with SSID $ssid and password $passwd"
+echo "These can be adjusted in the file /etc/hostapd/hostapd.conf"
 echo "To enable the new settings please reboot the system with 'sudo shutdown -r now'"
