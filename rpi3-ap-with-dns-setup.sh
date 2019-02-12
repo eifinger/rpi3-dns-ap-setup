@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "---- DNS and AP setup script v1.0 ----"
+echo "---- DNS and AP setup script v1.1 ----"
 echo "Author: Kevin Eifinger k.eifinger@googlemail.com"
 echo "Source on https://github.com/eifinger/rpi3-dns-ap-setup"
 echo "This code is subject to GNU General Public License v3.0"
@@ -45,14 +45,20 @@ sed -i 's:^#DAEMON_CONF="":DAEMON_CONF="/etc/hostapd/hostapd.conf":' /etc/defaul
 echo "Starting DNS and Access Point services"
 service hostapd start
 service dnsmasq start
+possibleInterfaces=$(ls /sys/class/net/)
+possibleInterfaces=${possibleInterfaces//$'\n'/,}
+echo "Please provide the interface to forward traffic to and press <Enter>"
+echo "Possible values are: $possibleInterfaces"
+read interface
 echo "Enabling forwarding ipv4 traffic"
 sed -i 's:^#net.ipv4.ip_forward=1:net.ipv4.ip_forward=1:' /etc/sysctl.conf
 echo "Enabling routing"
-iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
+iptables -t nat -A  POSTROUTING -o $interface -j MASQUERADE
 echo "Persisting iptables"
 iptables-save > /etc/iptables.ipv4.nat
 sed -i '/exit 0/aiptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
 echo "Finished"
 echo "Access Point is set up with SSID $ssid and password $passwd"
 echo "These can be adjusted in the file /etc/hostapd/hostapd.conf"
+echo "Access Point connection is shared with interface $interface"
 echo "To enable the new settings please reboot the system with 'sudo shutdown -r now'"
