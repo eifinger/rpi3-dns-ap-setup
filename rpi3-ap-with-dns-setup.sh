@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "---- DNS and AP setup script v1.1 ----"
+echo "---- DNS and AP setup script v1.2 ----"
 echo "Author: Kevin Eifinger k.eifinger@googlemail.com"
 echo "Source on https://github.com/eifinger/rpi3-dns-ap-setup"
 echo "This code is subject to GNU General Public License v3.0"
@@ -18,7 +18,7 @@ service dhcpcd restart
 echo "Backing up DNS config to /etc/dnsmasq.conf.orig"
 mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
 echo "interface=wlan0      # Use the require wireless interface - usually wlan0
-  dhcp-range=192.168.0.2,192.168.0.20,255.255.255.0,24h" > /etc/dnsmasq.conf
+  dhcp-range=192.168.0.10,192.168.0.254,255.255.255.0,24h" > /etc/dnsmasq.conf
 echo "Setting up Access Point"
 echo "-----------------------------------------"
 echo "Please provide the SSID and press <Enter>"
