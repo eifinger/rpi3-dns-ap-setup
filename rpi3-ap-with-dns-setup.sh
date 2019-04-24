@@ -25,6 +25,8 @@ echo "Please provide the SSID and press <Enter>"
 read ssid
 echo "Please provide the password (at least 8 characters long) and press <Enter>"
 read passwd
+echo "Please provide the ISO/IEC 3166-1 country code your are in (e.g. US or DE) and press <Enter>"
+read country_code
 echo "interface=wlan0
 driver=nl80211
 ssid=$ssid
@@ -40,9 +42,12 @@ wpa=2
 wpa_passphrase=$passwd
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
-rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf
+rsn_pairwise=CCMP
+country_code=$country_code" > /etc/hostapd/hostapd.conf
 sed -i 's:^#DAEMON_CONF="":DAEMON_CONF="/etc/hostapd/hostapd.conf":' /etc/default/hostapd
 echo "Starting DNS and Access Point services"
+systemctl unmask hostapd
+systemctl enable hostapd
 service hostapd start
 service dnsmasq start
 possibleInterfaces=$(ls /sys/class/net/)
