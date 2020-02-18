@@ -61,7 +61,7 @@ echo "Enabling routing"
 iptables -t nat -A  POSTROUTING -o $interface -j MASQUERADE
 echo "Persisting iptables"
 iptables-save > /etc/iptables.ipv4.nat
-sed -i '/exit 0/aiptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
+sed -i '$iptables-restore < /etc/iptables.ipv4.nat' /etc/rc.local
 echo "Finished"
 echo "Access Point is set up with SSID $ssid and password $passwd"
 echo "These can be adjusted in the file /etc/hostapd/hostapd.conf"
